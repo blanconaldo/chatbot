@@ -181,85 +181,61 @@
 
     <script src="/socket.io/socket.io.js"></script>
     <script>
-        const socket = io();
-        const chat = document.querySelector(".msger-chat");
+    const socket = io();
+    const chat = document.querySelector(".msger-chat");
 
-        // Function to append a message to the chat window
-        function appendMessage(name, side, text) {
-            const msgHTML = `
-                    <div class="msg ${side}">
-                        <div class="msg-img" style="background-image: url(https://image.flaticon.com/icons/svg/145/145867.svg)"></div>
-                        <div class="msg-bubble">
-                            <div class="msg-text">${text}</div>
-                        </div>
-                    </div>
-                    `;
-            chat.insertAdjacentHTML("beforeend", msgHTML);
-            chat.scrollTop = chat.scrollHeight;
+    // Function to append a message to the chat window
+    function appendMessage(name, side, text) {
+        const msgHTML = `
+            <div class="msg ${side}">
+                <div class="msg-img" style="background-image: url(https://image.flaticon.com/icons/svg/145/145867.svg)"></div>
+                <div class="msg-bubble">
+                    <div class="msg-text">${text}</div>
+                </div>
+            </div>
+        `;
+        chat.insertAdjacentHTML("beforeend", msgHTML);
+        chat.scrollTop = chat.scrollHeight;
+    }
+
+    // Event listener for form submission (sending message)
+    document.querySelector(".msger-inputarea").addEventListener("submit", function (e) {
+        e.preventDefault();
+        const input = document.querySelector(".msger-input");
+        const message = input.value.trim();
+        if (message) {
+            socket.emit("chat message", message);
+            appendMessage("You", "right-msg", message);
+            input.value = "";
         }
+    });
 
+    // Event listener for receiving messages from the server
+    socket.on("chat message", function (msg) {
+        appendMessage("BOT", "left-msg", msg);
+    });
 
-        // Event listener for form submission (sending message)
-        document.querySelector(".msger-inputarea").addEventListener("submit", function (e) {
-            e.preventDefault();
-            const input = document.querySelector(".msger-input");
-            const message = input.value.trim();
-            if (message) {
-                socket.emit("chat message", message);
-                appendMessage("You", "right-msg", message);
-                input.value = "";
-            }
+    // Event listener for hard fallback triggered
+    socket.on("hard fallback", function () {
+        // Clear chat history and inform user
+        chat.innerHTML = '<div class="msg left-msg"><div class="msg-bubble">Chat reset. Please start again.</div></div>';
+    });
+
+    // Event listener for receiving chat history
+    socket.on("chat history", function (history) {
+        // Clear existing messages
+        chat.innerHTML = '';
+        // Display chat history
+        history.forEach(entry => {
+            const { speaker, message } = entry;
+            appendMessage(speaker.toUpperCase(), `${speaker === "bot" ? "left-msg" : "right-msg"}`, message);
         });
+    });
 
-        // Event listener for receiving messages from the server
-        socket.on("chat message", function (msg) {
-            appendMessage("BOT", "left-msg", msg);
-        });
-
-        // Event listener for hard fallback triggered
-        socket.on("hard fallback", function () {
-            // Clear chat history and inform user
-            chat.innerHTML = '<div class="msg left-msg"><div class="msg-bubble">Chat reset. Please start again.</div></div>';
-        });
-
-        // Function to load chat history when page loads
-        window.addEventListener("load", function () {
-            // Fetch and display chat history from server
-            fetchChatHistory();
-        });
-
-        // Function to fetch and display chat history from server
-        function fetchChatHistory() {
-            fetch("/chat-history")
-                .then(response => response.json())
-                .then(history => {
-                    // Clear existing messages only if history is empty
-                    if (history.length = 0) {
-                        console.log("HI")
-                        //chat.innerHTML = ''; // Clear chat window
-                    } else {
-                        history.forEach(entry => {
-                            const { speaker, message } = entry;
-                            appendMessage(speaker.toUpperCase(), `${speaker === "bot" ? "left-msg" : "right-msg"}`, message);
-                        });
-                    }
-                })
-                .catch(error => console.error("Error fetching chat history:", error));
-        }
-
-        // Event listener to show/hide the scroll-to-bottom button
-        chat.addEventListener('scroll', function () {
-            if (chat.scrollTop + chat.clientHeight < chat.scrollHeight - 20) {
-                scrollToBottomBtn.style.display = 'block';
-            } else {
-                scrollToBottomBtn.style.display = 'none';
-            }
-        });
-
-        // Function to scroll to the bottom of the chat
-        function scrollToBottom() {
-            chat.scrollTop = chat.scrollHeight;
-        }
+    // Function to scroll to the bottom of the chat
+    function scrollToBottom() {
+        chat.scrollTop = chat.scrollHeight;
+    }
     </script>
 </body>
 </html>

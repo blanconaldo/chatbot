@@ -1,4 +1,4 @@
-[
+ [
     {
         "response_type": "greeting",
         "user_input": [ "hello", "hi", "hey" ],
@@ -25,7 +25,7 @@
     },
     {
         "response_type": "joke",
-        "user_input": [ "tell me a joke" ],
+        "user_input": [ "tell me a joke", "joke" ],
         "bot_response": "Why don't scientists trust atoms? Because they make up everything!",
         "required_words": [ "joke" ]
     },
@@ -50,14 +50,14 @@
     {
         "response_type": "order_menu",
         "user_input": [ "menu", "food", "options" ],
-        "bot_response": "Sure! We have pizza, burgers, salads, and drinks. What would you like to order?",
+        "bot_response": "Sure! We have pizza, burgers, salads. What would you like to order?",
         "required_words": [ "menu" ]
     },
     {
         "response_type": "order_pizza",
-        "user_input": [ "pizza" ],
+        "user_input": [ "pizza", "burgers", "burger", "salads", "salad" ],
         "bot_response": "Great choice! What toppings would you like on your pizza?",
-        "required_words": [ "pizza" ]
+        "required_words": []
     },
     {
         "response_type": "order_toppings",
@@ -73,7 +73,7 @@
     },
     {
         "response_type": "order_change",
-        "user_input": [ "Change order", "changed my mind" ],
+        "user_input": [ "change order", "changed my mind", "change" ],
         "bot_response": "Sure, what would you like for main dish instead?",
         "required_words": []
     },
