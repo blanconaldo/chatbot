@@ -1,4 +1,4 @@
- [
+[
     {
         "response_type": "greeting",
         "user_input": [ "hello", "hi", "hey" ],
@@ -51,37 +51,43 @@
         "response_type": "order_menu",
         "user_input": [ "menu", "food", "options" ],
         "bot_response": "Sure! We have pizza, burgers, salads. What would you like to order?",
-        "required_words": [ "menu" ]
+        "required_words": [ "menu" ],
+        "required_previous_question": null
     },
     {
         "response_type": "order_pizza",
         "user_input": [ "pizza", "burgers", "burger", "salads", "salad" ],
-        "bot_response": "Great choice! What toppings would you like on your pizza?",
-        "required_words": []
+        "bot_response": "Great choice! What toppings would you like on that?",
+        "required_words": [],
+        "required_previous_question": "order_menu"
     },
     {
         "response_type": "order_toppings",
         "user_input": [ "pepperoni", "mushrooms", "onions", "olives" ],
         "bot_response": "Got it. Would you like a drink with that?",
-        "required_words": []
+        "required_words": [],
+        "required_previous_question": "order_pizza"
     },
     {
         "response_type": "order_drink",
         "user_input": [ "soda", "water", "juice" ],
         "bot_response": "Okay, one drink. Anything else?",
-        "required_words": []
+        "required_words": [],
+        "required_previous_question": "order_toppings"
     },
     {
         "response_type": "order_change",
         "user_input": [ "change order", "changed my mind", "change" ],
         "bot_response": "Sure, what would you like for main dish instead?",
-        "required_words": []
+        "required_words": [],
+        "required_previous_question": "order_pizza"
     },
     {
         "response_type": "order_confirmation",
         "user_input": [ "no", "that's all", "nothing else" ],
         "bot_response": "Perfect! Your order will be ready in 30 minutes.",
-        "required_words": []
+        "required_words": [],
+        "required_previous_question": "order_drink"
     },
     {
         "response_type": "workout_start",
