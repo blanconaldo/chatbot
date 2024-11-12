@@ -1,5 +1,6 @@
 const express = require('express');
 const fs = require('fs');
+const bodyParser = require('body-parser');
 const path = require('path');
 const http = require('http');
 const socketIo = require('socket.io');
@@ -57,6 +58,7 @@ io.on('connection', (socket) => {
         };
     }
 
+
     // Send chat history to the user upon connection
     socket.emit('chat history', chatHistory[userId]);
 
@@ -112,6 +114,11 @@ io.on('connection', (socket) => {
         // Optionally, you can choose to keep or delete chat history here
         // delete chatHistory[userId];
     });
+});
+
+const PORT = process.env.PORT || 3000;
+server.listen(PORT, () => {
+    console.log(`Server listening on port ${PORT}`);
 });
 
 const PORT = process.env.PORT || 3000;
